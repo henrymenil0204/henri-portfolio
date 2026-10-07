@@ -1,4 +1,4 @@
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -102,7 +102,7 @@ nav a{display:block;padding:.85rem 0;font-size:.9rem}
 </div>
 </div>
 </header>
- 
+
 <main>
 <div class="wrap hero" id="home">
 <div>
@@ -114,12 +114,12 @@ nav a{display:block;padding:.85rem 0;font-size:.9rem}
 </div>
 </div>
 <div class="photo">
-   <div class="frame" id="frame"><img src="photo.jpg" alt="John Henry L. Menil" style="width:100%;height:100%;object-fit:cover;">
+<div class="frame" id="frame"><img src="photo.jpg" alt="John Henry L. Menil">
 <button class="upload" id="upBtn" type="button">Add photo</button></div>
 <input type="file" id="file" accept="image/*" hidden>
 </div>
 </div>
- 
+
 <section id="about"><div class="wrap about">
 <div>
 <h2>About</h2>
@@ -128,7 +128,7 @@ nav a{display:block;padding:.85rem 0;font-size:.9rem}
 </div>
 <div class="skills" aria-label="Skills"><span>HTML &amp; CSS</span><span>JavaScript</span><span>Node.js</span><span>Express</span><span>Firebase</span><span>UI design</span></div>
 </div></section>
- 
+
 <section id="projects"><div class="wrap">
 <h2>Projects</h2>
 <p class="lead">A few things I've built. Filter by type.</p>
@@ -140,13 +140,13 @@ nav a{display:block;padding:.85rem 0;font-size:.9rem}
 <div class="grid">
 <article class="card" data-t="web"><div class="thumb">Barangay Complaint and Public Service Request System</div><div class="body"><h3>Barangay Complaint and Public Service Request System</h3><p>A capstone web system for Barangay Panadtalan where residents file complaints and request public services.</p><div class="tags"><span>Web</span><span>Capstone</span></div><a class="btn ghost" href="#contact">Learn more</a></div></article>
 <article class="card" data-t="ai web"><div class="thumb">Henri Chatbot</div><div class="body"><h3>Henri AI chatbot</h3><p>A full-stack chatbot using Node, Express, Groq and Firebase.</p><div class="tags"><span>AI</span><span>Node.js</span><span>Firebase</span></div><a class="btn ghost" href="#contact">Learn more</a></div></article>
-<article class="card" data-t="web"><div class="thumb">Portfolio Sites</div><div cla     ss="body"><h3>Client portfolio sites</h3><p>Personal portfolio websites I designed and built for friends, including a dark-themed hardware technician site.</p><div class="tags"><span>Web</span><span>Design</span></div><a class="btn ghost" href="#contact">Learn more</a></div></article>
+<article class="card" data-t="web"><div class="thumb">Portfolio Sites</div><div class="body"><h3>Client portfolio sites</h3><p>Personal portfolio websites I designed and built for friends, including a dark-themed hardware technician site.</p><div class="tags"><span>Web</span><span>Design</span></div><a class="btn ghost" href="#contact">Learn more</a></div></article>
 </div>
 </div></section>
- 
+
 <section id="contact"><div class="wrap">
 <h2>Contact</h2>
-<p class="lead">Have a project or an opportunity? Send me a message.</p>
+<p class="lead">Have a project or an opportunity? Send me a message, or email me directly at <a href="mailto:henrymenil0204@gmail.com">henrymenil0204@gmail.com</a>.</p>
 <form id="form" novalidate>
 <label>Name<input id="n" required autocomplete="name"></label>
 <label>Email<input id="e" type="email" required autocomplete="email"></label>
@@ -157,7 +157,7 @@ nav a{display:block;padding:.85rem 0;font-size:.9rem}
 </div></section>
 </main>
 <footer><div class="wrap">© 2026 John Henry L. Menil. Kibawe, Bukidnon, Philippines.</div></footer>
- 
+
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const nav=$('#nav'),menu=$('#menu');
@@ -171,10 +171,22 @@ $$('.card').forEach(k=>k.hidden=!(c.dataset.f==='all'||k.dataset.t.includes(c.da
 $('#theme').onclick=()=>{const r=document.documentElement,d=r.dataset.theme==='dark'||(!r.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);r.dataset.theme=d?'light':'dark';try{localStorage.setItem('t',r.dataset.theme)}catch(e){}};
 try{const t=localStorage.getItem('t');if(t)document.documentElement.dataset.theme=t}catch(e){}
 $('#upBtn').onclick=()=>$('#file').click();
-$('#file').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{let i=$('#frame img');if(!i){i=document.createElement('img');i.alt='Portrait of John Henry L. Menil';$('#frame').prepend(i)}i.src=r.result;$('#initial').hidden=true};r.readAsDataURL(f)};
-$('#form').onsubmit=e=>{e.preventDefault();const n=$('#n').value.trim(),m=$('#m').value.trim(),em=$('#e');
-if(!n||!m||!em.value.includes('@')){$('#note').textContent='Fill in your name, a valid email and a message.';return}
-$('#note').textContent='Thanks, '+n+'. Your message is ready to send once you connect an email address.'};
+$('#file').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{let i=$('#frame img');if(!i){i=document.createElement('img');i.alt='Portrait of John Henry L. Menil';$('#frame').prepend(i)}i.src=r.result;const ini=$('#initial');if(ini)ini.hidden=true};r.readAsDataURL(f)};
+
+// Contact form: sends to henrymenil0204@gmail.com through Web3Forms
+const WEB3FORMS_KEY='6908f524-dc04-4d13-8300-dfb067f4934a';
+$('#form').onsubmit=async e=>{
+e.preventDefault();
+const n=$('#n').value.trim(),m=$('#m').value.trim(),em=$('#e').value.trim();
+if(!n||!m||!em.includes('@')){$('#note').textContent='Fill in your name, a valid email and a message.';return}
+$('#note').textContent='Sending...';
+try{
+const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({access_key:WEB3FORMS_KEY,name:n,email:em,message:m,subject:'New message from your portfolio'})});
+const d=await r.json();
+if(d.success){$('#note').textContent='Thanks, '+n+'! Your message was sent.';$('#form').reset()}
+else{$('#note').textContent='Something went wrong. Please try again.'}
+}catch(err){$('#note').textContent='Network error. Please try again.'}
+};
 </script>
 </body>
 </html>
